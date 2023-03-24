@@ -1,0 +1,27 @@
+Package: sormasr
+Title: Client for the 'SORMAS' API
+Version: 0.1.1
+Authors@R: c(
+    person("Robinson", "Amanyiraho", , "amanyiraho@gmail.com", role = c("cre", "aut",  "cph"),
+           comment = c(ORCID = "0000-0002-7747-1367"))
+  )
+Description: Connect and pull data from a 'SORMAS (Surveillance Outbreak Response Management and Analysis System)' into R.
+License: MIT + file LICENSE
+URL: https://github.com/amanyiraho/sormasr
+BugReports: https://github.com/amanyiraho/sormasr/issues
+Imports: 
+    attempt (>= 0.3.1),
+    curl (>= 4.3.3),
+    dplyr (>= 1.0.10),
+    httr2 (>= 0.2.2),
+    R6 (>= 2.5.1)
+Suggests: 
+    covr,
+    knitr,
+    rmarkdown,
+    testthat
+Depends: R (>= 4.1.0)
+Encoding: UTF-8
+VignetteBuilder: knitr
+RoxygenNote: 7.2.3
+LazyData: true
