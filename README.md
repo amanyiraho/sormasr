@@ -1,17 +1,29 @@
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # sormasr
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of sormasr is to ...
+## Overview
+
+`sormasr` is an R client for the SORMAS API.
+
+Pull data from SORMAS into R without logging into the SORMAS user
+interface.
+
+`sormasr`, if used with Rmarkdown, quarto, Rshiny, etc., can improve
+routine reporting and data requests.
 
 ## Installation
 
-You can install the development version of sormasr like so:
+You can install the development version of sormasr from
+[GitHub](https://github.com/) with:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("devtools")
+devtools::install_github("amanyiraho/sormasr")
 ```
 
 ## Example
@@ -22,4 +34,3 @@ This is a basic example which shows you how to solve a common problem:
 library(sormasr)
 ## basic example code
 ```
-
