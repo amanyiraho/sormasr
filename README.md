@@ -26,7 +26,7 @@ You can install the development version of sormasr from
 devtools::install_github("amanyiraho/sormasr")
 ```
 
-## Example
+## This is example one
 
 This is a basic example which shows you how to solve a common problem:
 
