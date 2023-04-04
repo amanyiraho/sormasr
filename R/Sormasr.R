@@ -40,7 +40,7 @@ Sormasr <- R6::R6Class(
       #attempt::stop_if_any(args, is.null,"You need to specify all arguements")
       #attempt::stop_if_none(args, is.character, "All arguements should be type character")
 
-      self$request_sent <- request(base_url = "http://staging.sormas.org.ng/ncdc-sormas-cases-api/") |>
+      self$request_sent <- request(base_url = "https://staging.sormas.org.ng/ncdc-sormas-cases-api/") |>
         # req_url_path_append(api_version) |>
         # req_url_path_append("api") |>
         # req_auth_basic(username = username, password = password ) |>
