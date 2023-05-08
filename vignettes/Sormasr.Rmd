@@ -20,6 +20,14 @@ library(sormasr)
 
 ```{r}
 
-Sormasr$ne()
+sormas_connection <- Sormasr$new()
+```
+
+```{r}
+sormas_connection$get_states(page = 0, size = 37)
+```
+
+```{r}
+dt |> tidyr::unnest(cols = lgas, )
 ```
 
