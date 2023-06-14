@@ -124,12 +124,20 @@ Sormasr <- R6::R6Class(
       print(response_object$url)
 
       response_data  <-  response_object |>
-        resp_body_json(simplifyVector = TRUE, flatten = TRUE) |>
-        tibble(ff$data$casesData$data) |> unnest(`ff$data$casesData$data`) |>  unnest(lgaBreakDown) |> unnest(epiBreakDown ) |>
-        select("stateName", "stateCode",  "lgaName",  "lgaCode", "epiData.totalNoOfConfirmedCases") |>
-        arrange(desc(`epiData.totalNoOfConfirmedCases`))
+        resp_body_json(simplifyVector = TRUE, flatten = TRUE)
 
-      response_data
+      tibble(response_data$data$casesData$data) |> unnest(`response_data$data$casesData$data`) |>  unnest(lgaBreakDown) |> unnest(epiBreakDown ) |>
+        select("stateName", "stateCode",  "lgaName",  "lgaCode", "epiData.totalNoOfConfirmedCases") |>
+        setNames(c( "state", "state_id", "lga", "lga_id", "confirmed_cases")) |>
+        arrange(desc(confirmed_cases))
+
+
+      #|>
+      # tibble(ff$data$casesData$data) |> unnest(`ff$data$casesData$data`) |>  unnest(lgaBreakDown) |> unnest(epiBreakDown ) |>
+      # select("stateName", "stateCode",  "lgaName",  "lgaCode", "epiData.totalNoOfConfirmedCases") |>
+      # arrange(desc(`epiData.totalNoOfConfirmedCases`))
+
+     # response_data
 
     },
 
@@ -175,7 +183,12 @@ Sormasr <- R6::R6Class(
       response_data  <-  response_object |>
         resp_body_json(simplifyVector = TRUE, flatten = TRUE)
 
-      response_data
+      tibble(response_data$data$data) |> unnest(cols = c(lgas)) |> unnest(cols = c(epiBreakdown)) |> unnest(ageBreakdown) |>
+        select(-c("epiWeek", "ageGroupCode",   "ageBreakdown")) |>
+        setNames(c( "state", "state_id", "lga", "lga_id", "age_group", "unvaccinated", "vaccinated", "unknown" , "uncategorised")) |>
+        filter(age_group %in% c("0 - 9", "9 - 59", "60 - 180", "180 - 1600")) |>
+        tidyr::pivot_longer(cols = c("unvaccinated", "vaccinated", "unknown", "uncategorised"), values_to = "confirmed_cases", names_to = "vaccination_status") |>
+        arrange(desc(confirmed_cases))
 
     }
 
