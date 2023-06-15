@@ -28,6 +28,7 @@ You can use a SORMAS connection to get data several times without needing to man
 \item \href{#method-Sormasr-new}{\code{Sormasr$new()}}
 \item \href{#method-Sormasr-get_states}{\code{Sormasr$get_states()}}
 \item \href{#method-Sormasr-get_disease_data}{\code{Sormasr$get_disease_data()}}
+\item \href{#method-Sormasr-get_age_sex}{\code{Sormasr$get_age_sex()}}
 \item \href{#method-Sormasr-clone}{\code{Sormasr$clone()}}
 }
 }
@@ -35,33 +36,20 @@ You can use a SORMAS connection to get data several times without needing to man
 \if{html}{\out{<a id="method-Sormasr-new"></a>}}
 \if{latex}{\out{\hypertarget{method-Sormasr-new}{}}}
 \subsection{Method \code{new()}}{
-Create a connection to SORMAS using basic authentication
+Initialize the Sormas API request
+
+This function initializes the Sormas API request by setting the base URL, request headers,
+and user agent.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sormasr$new(base_url, username, password, api_version = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sormasr$new()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{base_url}}{Base url e.g https://}
-
-\item{\code{username}}{Registered username e.g}
-
-\item{\code{password}}{Registered password e.g}
-
-\item{\code{api_version}}{The api version e.g}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new `Sormasr` object
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Sormasr-get_states"></a>}}
 \if{latex}{\out{\hypertarget{method-Sormasr-get_states}{}}}
 \subsection{Method \code{get_states()}}{
-Get states info from SORMAS
+Get states information from remote API
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sormasr$get_states(page, size = 37)}\if{html}{\out{</div>}}
 }
@@ -69,45 +57,96 @@ Get states info from SORMAS
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{page}}{number of page zero indexed i.e starts from 0}
+\item{\code{page}}{the page number of the states to retrieve.}
 
-\item{\code{size}}{size starts from 1 to 37}
+\item{\code{size}}{the limit of the number of states to retrieve.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A data frame
+a data frame with state and LGA information.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Sormasr-get_disease_data"></a>}}
 \if{latex}{\out{\hypertarget{method-Sormasr-get_disease_data}{}}}
 \subsection{Method \code{get_disease_data()}}{
-Get disease from SORMAS
+Get disease data from remote API
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sormasr$get_disease_data(
   disease = c("COVID", "CSM", "Cholera", "Lassa", "Measles", "MonkeyPox", "YellowFever"),
   stateId,
-  week,
-  year
+  month = c("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST",
+    "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"),
+  year,
+  page = "0",
+  size = "1"
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{disease}}{vector of disease from "COVID", "CSM", "Cholera", "Lassa", "Measles", "MonkeyPox", "YellowFever"}
+\item{\code{disease}}{the type of disease to retrieve data for. Choose from "COVID", "CSM", "Cholera",
+"Lassa", "Measles", "MonkeyPox", and "YellowFever".}
 
-\item{\code{stateId}}{vector of stateId}
+\item{\code{stateId}}{the ID of the state to retrieve disease data for.}
 
-\item{\code{week}}{vector of}
+\item{\code{month}}{the name of the month to retrieve disease data for. Choose from "JANUARY", "FEBRUARY",
+"MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER",
+and "DECEMBER".}
 
-\item{\code{year}}{vector of}
+\item{\code{year}}{the year to retrieve disease data for.}
+
+\item{\code{page}}{(optional) the page number of the results to retrieve. Default is "0".}
+
+\item{\code{size}}{(optional) the size of each page of results. Default is "1".}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A vector of all possible fields for a specific metadata
+a tibble with disease data for the specified parameters.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Sormasr-get_age_sex"></a>}}
+\if{latex}{\out{\hypertarget{method-Sormasr-get_age_sex}{}}}
+\subsection{Method \code{get_age_sex()}}{
+Fetches age and sex data for specified disease
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sormasr$get_age_sex(
+  disease = c("COVID", "CSM", "Cholera", "Lassa", "Measles", "MonkeyPox", "YellowFever"),
+  vaccinationStatus = "true",
+  stateId,
+  month = c("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST",
+    "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"),
+  year,
+  page = "0",
+  size = "1"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{disease}}{A character string specifying the disease. Defaults to "COVID".}
+
+\item{\code{vaccinationStatus}}{A character string specifying whether to include vaccination status information. Defaults to "true".}
+
+\item{\code{stateId}}{A character string specifying the state ID for which to fetch data.}
+
+\item{\code{month}}{A character string specifying the month for which to fetch data. Defaults to all months.}
+
+\item{\code{year}}{A character string specifying the year for which to fetch data.}
+
+\item{\code{page}}{A character string specifying the page number of results to fetch. Defaults to "0".}
+
+\item{\code{size}}{A character string specifying the number of results to fetch per page. Defaults to "1".}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A tibble data frame with age and sex data for the specified disease .
 }
 }
 \if{html}{\out{<hr>}}

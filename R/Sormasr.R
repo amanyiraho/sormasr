@@ -1,3 +1,4 @@
+
 #' Connect and pull/get data from a SORMAS
 #' @format An R6 class called Sormasr.
 #' @description
@@ -7,11 +8,12 @@
 #' @details
 #' You can use a SORMAS connection to get data several times without needing to manually supply your user credentials on each API call.
 #'
-#' @import httr2 dplyr R6 curl
+#' @import httr2 R6 curl
+#' @importFrom dplyr  select filter  arrange
 #' @importFrom tidyr unnest
 #' @export
 #'
-
+#'
 Sormasr <- R6::R6Class(
 
   "Sormasr",
@@ -27,14 +29,21 @@ Sormasr <- R6::R6Class(
       name = NULL,
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #' @description
-    #' Create a connection to SORMAS using basic authentication
-    #' @param base_url Base url e.g https://
-    #' @param username Registered username e.g
-    #' @param password Registered password e.g
-    #' @param api_version The api version e.g
-    #' @return A new `Sormasr` object
+    #' Initialize the Sormas API request
+    #'
+    #' This function initializes the Sormas API request by setting the base URL, request headers,
+    #' and user agent.
+    #'
+    #' @importFrom httr2 req_headers req_retry req_user_agent
+    #'
+    #' @export
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    initialize = function(base_url , username ,  password , api_version = NULL) {
+    initialize = function() {
+
+      # base_url
+      # username
+      # password
+      # api_version = NULL
 
       #args <- list(base_url = base_url, username = username, password = password)
       #Check that at least one argument is not null
@@ -54,13 +63,13 @@ Sormasr <- R6::R6Class(
     },
 
     #' @description
-    #' Get states info from SORMAS
+    #' Get states information from remote API
     #'
-    #' @param  page number of page zero indexed i.e starts from 0
-    #' @param size size starts from 1 to 37
+    #' @param page  the page number of the states to retrieve.
+    #' @param size  the limit of the number of states to retrieve.
+    #' @return      a data frame with state and LGA information.
     #'
-    #' @return A data frame
-    #'
+    #' @export
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     get_states = function(page, size = 37) {
 
@@ -87,14 +96,20 @@ Sormasr <- R6::R6Class(
     },
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    #' @description Get disease from SORMAS
+    #' @description
+    #' Get disease data from remote API
     #'
-    #' @return A vector of all possible fields for a specific metadata
-    #'
-    #' @param disease  vector of disease from "COVID", "CSM", "Cholera", "Lassa", "Measles", "MonkeyPox", "YellowFever"
-    #' @param stateId  vector of stateId
-    #' @param week  vector of
-    #' @param year vector of
+    #' @param disease  the type of disease to retrieve data for. Choose from "COVID", "CSM", "Cholera",
+    #'                  "Lassa", "Measles", "MonkeyPox", and "YellowFever".
+    #' @param stateId  the ID of the state to retrieve disease data for.
+    #' @param month    the name of the month to retrieve disease data for. Choose from "JANUARY", "FEBRUARY",
+    #'                  "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER",
+    #'                  and "DECEMBER".
+    #' @param year     the year to retrieve disease data for.
+    #' @param page     (optional) the page number of the results to retrieve. Default is "0".
+    #' @param size     (optional) the size of each page of results. Default is "1".
+    #' @return         a tibble with disease data for the specified parameters.
+    #' @export
     #'
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -132,24 +147,28 @@ Sormasr <- R6::R6Class(
         arrange(desc(confirmed_cases))
 
 
-      #|>
-      # tibble(ff$data$casesData$data) |> unnest(`ff$data$casesData$data`) |>  unnest(lgaBreakDown) |> unnest(epiBreakDown ) |>
-      # select("stateName", "stateCode",  "lgaName",  "lgaCode", "epiData.totalNoOfConfirmedCases") |>
-      # arrange(desc(`epiData.totalNoOfConfirmedCases`))
-
-     # response_data
-
     },
 
-    #' @description Get disease age catergory data from SORMAS
+    #' @description
+    #' Fetches age and sex data for specified disease
     #'
-    #' @return A vector of all possible fields for a specific metadata
+    #' @param disease A character string specifying the disease. Defaults to "COVID".
+    #' @param vaccinationStatus A character string specifying whether to include vaccination status information. Defaults to "true".
+    #' @param stateId A character string specifying the state ID for which to fetch data.
+    #' @param month A character string specifying the month for which to fetch data. Defaults to all months.
+    #' @param year A character string specifying the year for which to fetch data.
+    #' @param page A character string specifying the page number of results to fetch. Defaults to "0".
+    #' @param size A character string specifying the number of results to fetch per page. Defaults to "1".
     #'
-    #' @param disease  vector of disease from "COVID", "CSM", "Cholera", "Lassa", "Measles", "MonkeyPox", "YellowFever"
-    #' @param stateId  vector of stateId
-    #' @param week  vector of
-    #' @param year vector of
-    #' @param  vaccinationStatus get vaccination status "true" or "false"
+    #' @return A tibble data frame with age and sex data for the specified disease .
+    #'
+    #' @importFrom tidyr pivot_longer
+    #' @importFrom dplyr filter arrange select
+    #' @importFrom purrr map_lgl
+    #' @importFrom tibble tibble
+    #' @import attempt
+    #'
+    #' @export
     #'
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

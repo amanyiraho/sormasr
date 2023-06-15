@@ -14,7 +14,9 @@ Imports:
     curl,
     dplyr,
     httr2,
+    purrr,
     R6,
+    tibble,
     tidyr
 Suggests: 
     covr,
