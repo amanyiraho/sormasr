@@ -163,7 +163,7 @@ Sormasr <- R6::R6Class(
     #' @return A tibble data frame with age and sex data for the specified disease .
     #'
     #' @importFrom tidyr pivot_longer
-    #' @importFrom dplyr filter arrange select
+    #' @importFrom dplyr filter arrange select distinct
     #' @importFrom purrr map_lgl
     #' @importFrom tibble tibble
     #' @import attempt
@@ -207,7 +207,8 @@ Sormasr <- R6::R6Class(
         setNames(c( "state", "state_id", "lga", "lga_id", "age_group", "unvaccinated", "vaccinated", "unknown" , "uncategorised")) |>
         filter(age_group %in% c("0 - 9", "9 - 59", "60 - 180", "180 - 1600")) |>
         tidyr::pivot_longer(cols = c("unvaccinated", "vaccinated", "unknown", "uncategorised"), values_to = "confirmed_cases", names_to = "vaccination_status") |>
-        arrange(desc(confirmed_cases))
+        arrange(desc(confirmed_cases)) |>
+        distinct()
 
     }
 
