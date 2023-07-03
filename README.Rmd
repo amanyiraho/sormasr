@@ -35,7 +35,7 @@ You can install the development version of sormasr from [GitHub](https://github.
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("amanyiraho/sormasr")
+devtools::install_github("geeks-projects/sormasr")
 ```
 
 ## This is example one
