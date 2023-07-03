@@ -7,8 +7,8 @@ Authors@R: c(
   )
 Description: Connect and pull data from a 'SORMAS (Surveillance Outbreak Response Management and Analysis System)' into R.
 License: MIT + file LICENSE
-URL: https://github.com/amanyiraho/sormasr
-BugReports: https://github.com/amanyiraho/sormasr/issues
+URL: https://github.com/amanyiraho/sormasr, https://github.com/geeks-projects/sormasr
+BugReports: https://github.com/geeks-projects/sormasr/issues
 Imports: 
     attempt,
     curl,
