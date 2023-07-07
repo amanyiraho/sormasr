@@ -9,7 +9,7 @@
 #' You can use a SORMAS connection to get data several times without needing to manually supply your user credentials on each API call.
 #'
 #' @import httr2 R6 curl
-#' @importFrom dplyr  select filter  arrange
+#' @importFrom dplyr  select filter  arrange distinct
 #' @importFrom tidyr unnest
 #' @export
 #'
@@ -91,7 +91,8 @@ Sormasr <- R6::R6Class(
 
         response_data[[1]] |>
           unnest(lgas, names_repair = "check_unique") |>
-          setNames(c("state_name", "state_id", "lga_id", "lga_name" ))
+          setNames(c("state_name", "state_id", "lga_id", "lga_name" )) |>
+          distinct()
 
     },
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -144,7 +145,8 @@ Sormasr <- R6::R6Class(
       tibble(response_data$data$casesData$data) |> unnest(`response_data$data$casesData$data`) |>  unnest(lgaBreakDown) |> unnest(epiBreakDown ) |>
         select("stateName", "stateCode",  "lgaName",  "lgaCode", "epiData.totalNoOfConfirmedCases") |>
         setNames(c( "state", "state_id", "lga", "lga_id", "confirmed_cases")) |>
-        arrange(desc(confirmed_cases))
+        arrange(desc(confirmed_cases)) |>
+        distinct()
 
 
     },
